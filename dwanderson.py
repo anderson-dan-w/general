@@ -112,10 +112,11 @@ def print_list(some_list, npline=None):
         the width of the terminal
     """
     if isinstance(some_list, set):
-        some_list = sorted(some_list)
+        some_list = list(some_list)
     if not some_list:
         print()
         return
+    some_list = sorted(some_list)
     width, _h = get_terminal_size()  # ignore height, _h
     max_width = len(max(some_list, key=len)) + 1  # for space separator
     if npline is None:  ## number-per-line
