@@ -19,13 +19,14 @@ playground = os.path.dirname(os.path.realpath(__file__)) + "/"
 text_dir = playground + "text/"
 texts = [text_dir + f for f in os.listdir(text_dir)]
 
-words = set()
-for fname in [f for f in texts if f.endswith(".dict")]:
-    with open(fname) as fh:
-        _w = str(fh.read()).replace("\r","\n").replace("\n\n","\n")
-        _w = _w.upper().split("\n")
-        words.update(_w)
-
+def readin_words():
+    words = set()
+    for fname in [f for f in texts if f.endswith(".dict")]:
+        with open(fname) as fh:
+            _w = str(fh.read()).replace("\r","\n").replace("\n\n","\n")
+            _w = _w.upper().split("\n")
+            words.update(_w)
+    return words
 
 ##############################################################################
 class Color(object):
@@ -70,7 +71,8 @@ def time_me(func):
         start = time.time()
         response = func(*args, **kwargs)
         if timer:
-            print("Took ~{:0.06} seconds".format(time.time() - start))
+            print("{} took ~{:0.06} seconds".format(func.__name__,
+                time.time() - start))
         return response
     return wrapper
 
@@ -107,7 +109,7 @@ def get_terminal_size():
 
 
 ##############################################################################
-def print_list(some_list, npline=None):
+def print_list(some_list, indent="", npline=None):
     """ Print a list (or set) to the terminal, wrapped approriately as per
         the width of the terminal
     """
@@ -118,10 +120,12 @@ def print_list(some_list, npline=None):
         return
     some_list = sorted(some_list)
     width, _h = get_terminal_size()  # ignore height, _h
+    width -= len(indent)
     max_width = len(max(some_list, key=len)) + 1  # for space separator
     if npline is None:  ## number-per-line
         npline = width // max_width
     for line in range(math.ceil(len(some_list) / npline)):
+        print(indent, end="")
         nelts = min(npline, len(some_list[line * npline:]))
         for idx in range(nelts):
             elt = some_list[line * npline + idx]
@@ -129,6 +133,12 @@ def print_list(some_list, npline=None):
         print()
     return
 
+
+def print_dict(some_dict, npline=None):
+    for key, value in sorted(some_dict.items(), key=lambda x:x[0]):
+        print(key)
+        print_list(value, "    ")
+    return
 
 ##############################################################################
 def is_written_to(sec=0):
