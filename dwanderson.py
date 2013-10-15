@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+from __future__ import print_function, division
 
 ## python module
 import collections
@@ -102,13 +103,20 @@ def get_terminal_size():
             pass
     if not cr:
         try:
+            ln = int(os.popen('echo $LINES').read().strip())
+            col = int(os.popen('echo $COLUMNS').read().strip())
+            cr = (ln, col)
+        except:
+            pass
+    if not cr:
+        try:
             cr = (env['LINES'], env['COLUMNS'])
         except:
             cr = (25, 80)
     return cr[1], cr[0]
 
 
-##############################################################################
+###############################################################################
 def print_list(some_list, indent="", npline=None):
     """ Print a list (or set) to the terminal, wrapped approriately as per
         the width of the terminal
@@ -119,12 +127,15 @@ def print_list(some_list, indent="", npline=None):
         print()
         return
     some_list = sorted(some_list)
+    if any(" " in item for item in some_list):
+        some_list = ["(" + item + ")" for item in some_list]
     width, _h = get_terminal_size()  # ignore height, _h
     width -= len(indent)
-    max_width = len(max(some_list, key=len)) + 1  # for space separator
+    ## +1 for space separator
+    max_width = len(str(max(some_list, key=lambda x:len(str(x))))) + 1
     if npline is None:  ## number-per-line
         npline = width // max_width
-    for line in range(math.ceil(len(some_list) / npline)):
+    for line in range(int(math.ceil(len(some_list) // npline))):
         print(indent, end="")
         nelts = min(npline, len(some_list[line * npline:]))
         for idx in range(nelts):
