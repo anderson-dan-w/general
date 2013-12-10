@@ -129,13 +129,13 @@ def print_list(some_list, indent="", npline=None):
     some_list = sorted(some_list)
     if any(" " in item for item in some_list):
         some_list = ["(" + item + ")" for item in some_list]
-    width, _h = get_terminal_size()  # ignore height, _h
-    width -= len(indent)
     ## +1 for space separator
     max_width = len(str(max(some_list, key=lambda x:len(str(x))))) + 1
     if npline is None:  ## number-per-line
+        width, _h = get_terminal_size()  # ignore height, _h
+        width -= len(indent)
         npline = width // max_width
-    for line in range(int(math.ceil(len(some_list) // npline))):
+    for line in range(int(math.ceil(len(some_list) / npline))):
         print(indent, end="")
         nelts = min(npline, len(some_list[line * npline:]))
         for idx in range(nelts):
