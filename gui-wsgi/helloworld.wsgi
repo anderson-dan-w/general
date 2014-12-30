@@ -1,7 +1,10 @@
-#!/usr/bin/python
+#!/usr/bin/python3.3
 from bottle import debug, get, post, request, route, run
 from bottle import jinja2_template as template
 from bottle import jinja2_view as view
+
+## my modules
+from hlp import getHLP
 
 @route("/hello")
 @route("/hello/<name>")
@@ -27,6 +30,10 @@ def do_login():
         return "<p>don't make your password your username... idiot</p>"
     else:
         return "<p>username and password are different... maybe valid?</p>"
+
+@get("/hlp")
+def hlp():
+    return template('hlp.tpl', hls=getHLP.getHLP())
 
 debug(True)
 run(host="localhost", port=8080)

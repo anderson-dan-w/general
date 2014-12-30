@@ -15,5 +15,4 @@ def pyth100():
                         el = time()-st
                         print("took ", el, a, b, c, a*b*c)
                         return (a, b, c)
-            
-    
+

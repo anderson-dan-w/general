@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 from time import time
 from math import *
 
@@ -40,3 +40,42 @@ def getPrimesUpTo(maxnum):
     el = time()-st
     print("took ", el)
     return primeList
+
+def getFactors(num, primes):
+    factors = []
+    pindex = 0
+    while num != 1:
+        if num % primes[pindex]:
+            pindex += 1
+            if pindex == len(primes):
+                print("incomplete!")
+                break
+        else:
+            factors.append(primes[pindex])
+            num /= primes[pindex]
+    return factors
+
+import collections
+def areSameLenDistinct(first, second, length):
+    if length != len(first) or len(first) != len(second):
+        return False
+    for k, v in first.items():
+        if k in second and v == second[k]:
+            return False
+    return True
+
+def findConsecutive(start, stop, primes, length):
+    previous = collections.Counter()
+    consecutive = 1
+    for i in range(start, stop):
+        current = getFactors(i, primes)
+        current = collections.Counter(current)
+        if areSameLenDistinct(previous, current, length):
+            consecutive += 1
+            print("consec: {} and {}".format(consecutive, i-1, i))
+            if consecutive == length:
+                print("DONE!\n\n")
+        else:
+            consecutive = 1
+        previous = current
+
