@@ -57,27 +57,6 @@ class Color(object):
         setattr(Color, name, Color.prefix + str(number) + "m")
         Color._colors.update({name : getattr(Color, name)})
 
-
-##############################################################################
-def time_me(func):
-    """ Wraps an arbitrary function with a timer, so it will print out how long
-        the function took to complete
-    """
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        try:
-            timer = kwargs.pop("time_me")
-        except KeyError as e:
-            timer = True
-        start = time.time()
-        response = func(*args, **kwargs)
-        if timer:
-            print("{} took ~{:0.06} seconds".format(func.__name__,
-                time.time() - start))
-        return response
-    return wrapper
-
-
 ##############################################################################
 def get_terminal_size():
     """ Return the tuple containing width, height, in line count.
