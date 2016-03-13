@@ -1,6 +1,5 @@
-#!/usr/bin/python3
-
-## python module
+#!/usr/bin/env python3
+from __future__ import print_function, division, absolute_import
 from datetime import timedelta as td
 import itertools
 import select
@@ -9,11 +8,8 @@ import termios
 import time
 import tty
 
-## dwanderson modules
 from dwanderson import Color
 
-
-##############################################################################
 basic_pomo = (((25, 'Work'), (5, 'Break')) * 3 + (25, 'Work') + (15, 'BREAK'))
 
 ## refactor...
@@ -28,7 +24,7 @@ def pomo_input(sec=1):
                 letter = sys.stdin.read(1).lower()
                 if letter == 'q':
                     print('\r{:<30}'.format(Color.colorize("Quittin", "GRAY")),
-                            end='')
+                            end='\n')
                     response = False
                 elif letter == 'n':
                     print('\r{:<15}'.format(Color.colorize("NEXT", "GRAY")),
