@@ -57,3 +57,18 @@ def countcalls(f):
         return f(*args, **kwargs)
     calls[wrapper] = 0
     return wrapper
+
+## stolen directly from Zapier Engineering
+## https://zapier.com/engineering/profiling-python-boss/
+@nice_decorator
+def do_cprofile(f):
+    def wrapper(*args, **kwargs):
+        prof = cProfile.Profile()
+        try:
+            prof.enable()
+            result = f(*args, **kwargs)
+            prof.disable()
+            return result
+        finally:
+            prof.print_stats()
+    return wrapper

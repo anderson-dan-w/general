@@ -24,9 +24,9 @@ def readin_words():
     words = set()
     for fname in [f for f in texts if f.endswith(".dict")]:
         with open(fname) as fh:
-            _w = str(fh.read()).replace("\r","\n").replace("\n\n","\n")
-            _w = _w.upper().split("\n")
-            words.update(_w)
+            text = str(fh.read()).replace("\r","\n").replace("\n\n","\n")
+            w = (w for w in text.upper().split("\n") if w)
+            words.update(w)
     return words
 
 ##############################################################################
